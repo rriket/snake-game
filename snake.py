@@ -1,168 +1,157 @@
-from os import set_blocking
-import turtle
-import time 
-import random 
+import turtle as ttl  
+import time  
+import random as rdm  
+# Here we will be creating a window screen  
+window_screen = ttl.Screen()  
+window_screen.title("Snake Game By Riket")  
+window_screen.bgcolor("black")  
+   
+   
+delay = 0.1  
+score = 0  
+high_score = 0  
+  
 
-delay =0.1
-score=0
-highestscore=0
-#snake body
-bodies=[]
-#main screen
-main_Screen=turtle.Screen()
-main_Screen.title('Snake Game')
-main_Screen.bgcolour('green')
-main_Screen.setup(width=600,height=600)
-
-#Snake Head
-head=turtle.Turtle()
-head.speed(0)
-head.shape('triangular')
-head.color('white')
-head.fillcolor('blue')
-head.penup()
-head.goto(0,0)
-head.direction='stop'
-
-
-#Snake Food
-food=turtle.Turtle()
-food.speed(0)
-food.shape('square')
-food.color('yellow')
-food.fillcolor('red')
-food.penup()
-food.ht()#hide
-
-food.goto(0.200)
-food.st()#show turtle
-
-#score Board
-sb=turtle.Turtle()
-sb.shape('square')
-sb.color('black')
-sb.fillcolor('red')
-sb.penup()
-sb.ht()#hide
-food.goto(-280,250)
-sb.write('Score: 0 | Highestscore: 0' ,font=('arial',15,'bold'))#font
-
-#function declaration
-def moveup():
-    if head.direction!='down':
-        head.direction='up'
-
-def movedown():
-    if head.direction!='up':
-        head.direction='down'
-
-def moveleft():
-    if head.direction!='right':
-        head.direction='left'
-
-
-def moveright():
-    if head.direction!='left':
-        head.direction='right'
-             
-
-def movestop():
-    head.direction='stop'
-
-
-def move():
-    if head.direction!='up':
-        y=head.ycor()
-        head.sety(y+20)
-
-    if head.direction!='down':
-        y=head.ycor()
-        head.sety(y-20)
-
-    if head.direction!='left':
-        x=head.ycor()
-        head.setx(x-20) 
-
-    if head.direction!='right':
-        x=head.ycor()
-        head.setx(x+20)  
-
-#Event handling
-main_Screen.listen()
-main_Screen.onkey(moveup,'Up')
-main_Screen.onkey(movedown,'Down')
-main_Screen.onkey(moveleft,'Left')
-main_Screen.onkey(moveright,'Right')
-main_Screen.onkey(movestop,'space')
-
-#mainloop
-while True:
-    main_Screen.update()
-
-    if head.xcor()>280:
-        head.setx(-280)#no boundaries ,collosion with boundaries
-    if head.xcor()<280:
-        head.setx(280)#no boundaries
-    if head.ycor()>280:
-        head.sety(-280)#no boundaries
-    if head.ycor()<280:
-        head.sety(280)#no boundaries
-
-    #check collosion with food
-    if head.distance(food)<20:#randowm food
-        x=random.randint(-290,290)
-        y=random.randint(-290,290)
-        food.goto(x,y)
-        #increase the length of snake
-        body=turtle.Turtle()
-        body.speed(0)
-        body.penup()
-        body.shape('square')
-        x=random.randint(-290,290)
-        body.color('red')
-        body.fillcolor('darkred')
-        bodies.append(body)#append main body bodies
-        #increase score with appending main body
-        score+=5  #by 5
-
-        #change delay ,speed
-        delay -=0.01
-
-        #update the highest score
-        if score>highestscore:
-            highestscore=score
-
-
-        sb.clear()
-        sb.write('score: {}  | Highest Score: {}'.format(score,highestscore), font=('arial',15,'bold')) 
-        #move the snake bodies
-    for i in range(len(bodies)-1,0,-1):
-        x=bodies[i-1].xcor()#cor=cordinates
-        y=bodies[i-1].ycor()
-        bodies[i].goto(x,y)
-    if len(bodies)>0:
-        x=head.xcor()
-        y=head.ycor()
-        bodies[0].goto(x,y)
-    move()  #move function calling 
-
-        #if colllosion  with self body
-    for body in bodies:
-        if body.distance(head)<20:
-            time.sleep(1)
-            head.goto(0,0)
-            head.direction='stop'
-
-                #hide bodies
-            for body in bodies:
-                body.ht()
-            bodies.clear()
-            score=0
-            delay=0.1
-            #update score board  
-            sb.clear()
-            
-            sb.write('Score: {}  | Highest Score: {}'.format(score,highestscore), font=('arial',15,'bold'))
-
-    time.sleep(delay)
-main_Screen.mainloop()
+# The width and height can be put as user's choice  
+window_screen.setup(width = 650, height = 650)  
+window_screen.tracer(0)  
+   
+   
+# Here, we will create the head of the snake  
+head = ttl.Turtle()  
+head.shape("circle")  
+head.color("white")  
+head.penup()  
+head.goto(0, 0)  
+head.direction = "Stop"  
+   
+   
+# Here, we will create the food in the game  
+food1 = ttl.Turtle()  
+colors = rdm.choice(['pink', 'yellow', 'blue'])  
+shapes = rdm.choice(['triangle', 'square', 'circle'])  
+food1.speed(0)  
+food1.shape(shapes)  
+food1.color(colors)  
+food1.penup()  
+food1.goto(0, 100)  
+   
+   
+pen1 = ttl.Turtle()  
+pen1.speed(0)  
+pen1.shape("square")  
+pen1.color("white")  
+pen1.penup()  
+pen1.hideturtle()  
+pen1.goto(0, 250)  
+pen1.write("Score: 0, High Score: 0", align = "center",  
+          font = ("arial", 22, "bold"))  
+# Here, we will assign the key directions  
+def group1():  
+    if head.direction != "down":  
+        head.direction = "up"  
+   
+   
+def go_down():  
+    if head.direction != "up":  
+        head.direction = "down"  
+   
+   
+def go_left():  
+    if head.direction != "right":  
+        head.direction = "left"  
+   
+   
+def go_right():  
+    if head.direction != "left":  
+        head.direction = "right"  
+   
+   
+def move():  
+    if head.direction == "up":  
+        y1 = head.ycor()  
+        head.sety(y1 + 20)  
+    if head.direction == "down":  
+        y1 = head.ycor()  
+        head.sety(y1 - 20)  
+    if head.direction == "left":  
+        x1 = head.xcor()  
+        head.setx(x1 - 20)  
+    if head.direction == "right":  
+        x1 = head.xcor()  
+        head.setx(x1 + 20)  
+   
+   
+window_screen.listen()  
+window_screen.onkeypress(group1, "Up")  
+window_screen.onkeypress(go_down, "Down")  
+window_screen.onkeypress(go_left, "Left")  
+window_screen.onkeypress(go_right, "Right")  
+  
+segments1 = []  
+   
+# Code for main gameplay  
+while True:  
+    window_screen.update()  
+    if head.xcor() > 290 or head.xcor() < -290 or head.ycor() > 290 or head.ycor() < -290:  
+        time.sleep(1)  
+        head.goto(0, 0)  
+        head.direction = "Stop"  
+        colors = rdm.choice(['pink', 'blue', 'yellow'])  
+        shapes = rdm.choice(['square', 'circle'])  
+        for segment1 in segments1:  
+            segment1.goto(1050, 1050)  
+        segments1.clear()  
+        score = 0  
+        delay = 0.1  
+        pen1.clear()  
+        pen1.write("Score: {} Highest Score: {} ".format(  
+            score, high_score), align = "center", font = ("arial", 24, "bold"))  
+    if head.distance(food1) < 20:  
+        x1 = rdm.randint(-275, 275)  
+        y1 = rdm.randint(-275, 275)  
+        food1.goto(x1, y1)  
+   
+        # Here, we are adding segment  
+        segment = ttl.Turtle()  
+        segment.speed(0)  
+        segment.shape("square")  
+        segment.color("orange")  # tail colour  
+        segment.penup()  
+        segments1.append(segment)  
+        delay -= 0.001  
+        score += 10  
+        if score > high_score:  
+            high_score = score  
+        pen1.clear()  
+        pen1.write("Score : {} Highest Score : {} ".format(  
+            score, high_score), align = "center", font = ("arial", 22, "bold"))  
+    # Checking for head collisions with body segments  
+    for index in range(len(segments1)-1, 0, -1):  
+        x1 = segments1[index - 1].xcor()  
+        y1 = segments1[index - 1].ycor()  
+        segments1[index].goto(x1, y1)  
+    if len(segments1) > 0:  
+        x1 = head.xcor()  
+        y1 = head.ycor()  
+        segments1[0].goto(x1, y1)  
+    move()  
+    for segment1 in segments1:  
+        if segment1.distance(head) < 20:  
+            time.sleep(1)  
+            head.goto(0, 0)  
+            head.direction = "stop"  
+            colors = rdm.choice(['pink', 'blue', 'yellow'])  
+            shapes = rdm.choice(['square', 'triangle'])  
+            for segment1 in segments1:  
+                segment1.goto(1050, 1050)  
+            segment1.clear()  
+   
+            score = 0  
+            delay = 0.1  
+            pen1.clear()  
+            pen1.write("Score: {} Highest Score: {} ".format(  
+                score, high_score), align = "center", font = ("arial", 22, "bold"))  
+    time.sleep(delay)  
+   
+window_screen.mainloop()  
